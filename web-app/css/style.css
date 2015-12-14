@@ -1,0 +1,26 @@
+.m-t-0 { margin-top: 0 }
+.m-r-0 { margin-right: 0 }
+.m-b-0 { margin-bottom: 0 }
+.m-l-0 { margin-left: 0 }
+
+#container_body {
+	padding-top: 75px;
+}
+
+.question-summary {
+	border-bottom: 1px solid #ddd;
+	padding: 10px 0;
+}
+.question-summary h3 {
+	margin-top: 0;
+}
+.question-summary .content {
+	color: #888;
+}
+.question-summary .category {
+	width: 150px;
+	float: left;
+}
+.question-summary .author {
+	float: right;
+}
