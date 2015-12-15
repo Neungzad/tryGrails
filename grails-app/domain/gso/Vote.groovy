@@ -4,10 +4,11 @@ class Vote {
 
     Integer vote
     Date    dateCreated
-    Date    lastUpdated
+    User 	voter
 
-    static belongsTo = [comment: Comment, user: User]
+    static belongsTo = [comment: Comment]
     
     static constraints = {
+
     }
 }

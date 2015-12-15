@@ -8,9 +8,11 @@ class Question {
     Integer viewCount = 0
     QuestionStatus  status = QuestionStatus.ACTIVE
     Date    dateCreated
+    User    creator
     Date    lastUpdated
+    User    updater
 
-    static belongsTo = [category: Category, user: User]
+    static belongsTo = [category: Category]
     static hasMany = [comments: Comment]
 
     static constraints = {
@@ -20,8 +22,7 @@ class Question {
     
     static mapping = {
         content(type: "text")
-        category(fetch: 'join')
-        user(fetch: 'join')        
+        category(fetch: 'join')  
     }
 
     enum QuestionStatus {

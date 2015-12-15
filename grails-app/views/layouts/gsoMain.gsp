@@ -19,15 +19,18 @@
           </button>
           <a class="navbar-brand" href="#">Stack Overflow by Grails</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
+        <div id="navbar" class="collapse navbar-collapse">          
+          <ul class="nav navbar-nav">
+            <li class="active"><g:link controller="question" action="index">Question</g:link></li>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<sec:ifLoggedIn>           		
-				<li><a href="#">Logged in : <sec:loggedInUserInfo field="username"/></a></li>
-				<li><g:link controller="logout" action="index">Logout</g:link></li>
+            <sec:ifLoggedIn>           		
+      				<li><a href="#">Logged in : <sec:loggedInUserInfo field="username"/></a></li>
+      				<li><g:link controller="logout" action="index">Logout</g:link></li>
           	</sec:ifLoggedIn>
-        	<sec:ifNotLoggedIn>
-        		<li class="active"><g:link controller="login" action="index">Login</g:link></li>
-        	</sec:ifNotLoggedIn>           
+          	<sec:ifNotLoggedIn>
+          		<li><g:link controller="login" action="index">Login</g:link></li>
+          	</sec:ifNotLoggedIn>           
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->

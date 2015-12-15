@@ -2,6 +2,7 @@ package gso
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import grails.plugin.springsecurity.annotation.Secured
 
 @Transactional(readOnly = true)
 class QuestionController {
@@ -13,14 +14,6 @@ class QuestionController {
     def index(Integer max) {
         params.max = Math.min(max ?: 3, 100)
         // params.fetch = [category:'join']
-
-        /*def user = springSecurityService.currentUser
-        println "============== user : ${user.displayName} ================="*/
-
-       /*        
-        println "param : ${params}"
-        println "params.subjectContains : ${params.subjectContains}"
-        // println "params.category : ${params.category}"*/
         
         def questionInstanceList = Question.createCriteria().list(params){
             eq('status', Question.QuestionStatus.ACTIVE)
@@ -28,7 +21,6 @@ class QuestionController {
             if (params.categoryId) eq('category.id', params.categoryId.toLong())                      
         }        
 
-        // def categories = Category.executeQuery("SELECT category_id, count('category_id') as cateCount FROM question GROUP BY category_id")
         def categories = Question.executeQuery("select category, count(*) from Question group by category_id")
 
         respond questionInstanceList, model:[questionInstanceCount: questionInstanceList.totalCount, categories: categories]
@@ -38,22 +30,26 @@ class QuestionController {
         respond questionInstance
     }
 
+    @Secured('ROLE_USER')
     def create() {
         respond new Question(params)
     }
 
     @Transactional
+    @Secured('ROLE_USER')
     def save(Question questionInstance) {
         if (questionInstance == null) {
             notFound()
             return
         }
 
+        questionInstance.user = springSecurityService.currentUser
+        println "${springSecurityService.currentUser}";
+
         if (questionInstance.hasErrors()) {
             respond questionInstance.errors, view:'create'
             return
         }
-
         questionInstance.save flush:true
 
         request.withFormat {
@@ -65,11 +61,13 @@ class QuestionController {
         }
     }
 
+    @Secured('ROLE_USER')
     def edit(Question questionInstance) {
         respond questionInstance
     }
 
     @Transactional
+    @Secured('ROLE_USER')
     def update(Question questionInstance) {
         if (questionInstance == null) {
             notFound()
@@ -93,6 +91,7 @@ class QuestionController {
     }
 
     @Transactional
+    @Secured('ROLE_USER')
     def delete(Question questionInstance) {
 
         if (questionInstance == null) {
@@ -122,7 +121,7 @@ class QuestionController {
     }
 }
 
-class QuestionSearchCmd {
+/*class QuestionSearchCmd {
     String subjectContains
     Category category
-}
+}*/

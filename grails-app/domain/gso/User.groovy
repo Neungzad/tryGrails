@@ -28,8 +28,6 @@ class User implements Serializable {
 		this.email = email
 	}
 
-	static hasMany = [questions: Question, comments: Comment, votes: Vote]
-
 	Set<Role> getAuthorities() {
 		UserRole.findAllByUser(this)*.role
 	}
