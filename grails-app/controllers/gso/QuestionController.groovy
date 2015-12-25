@@ -10,6 +10,7 @@ class QuestionController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def springSecurityService
+    def gsoService
 
     def index(Integer max) {
         params.max = Math.min(max ?: 3, 100)
@@ -21,30 +22,39 @@ class QuestionController {
             if (params.categoryId) eq('category.id', params.categoryId.toLong())                      
         }        
 
-        def categories = Question.executeQuery("select category, count(*) from Question group by category_id")
+        def categories = Question.executeQuery("select category, count(*) from Question where status = '" + Question.QuestionStatus.ACTIVE + "' group by category_id")
 
         respond questionInstanceList, model:[questionInstanceCount: questionInstanceList.totalCount, categories: categories]
     }
 
     def show(Question questionInstance) {
+        if (questionInstance.status == Question.QuestionStatus.DELETED) {
+            redirect action: "index"
+        }
+
+        // increase view count
+        questionInstance.viewCount++
+        questionInstance.save flush:true
+
         respond questionInstance
     }
 
-    @Secured('ROLE_USER')
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
         respond new Question(params)
     }
 
     @Transactional
-    @Secured('ROLE_USER')
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def save(Question questionInstance) {
         if (questionInstance == null) {
             notFound()
             return
         }
 
-        questionInstance.user = springSecurityService.currentUser
-        println "${springSecurityService.currentUser}";
+        def currentUser = springSecurityService.loadCurrentUser()       
+        questionInstance.creator = currentUser
+        questionInstance.updater = currentUser
 
         if (questionInstance.hasErrors()) {
             respond questionInstance.errors, view:'create'
@@ -61,13 +71,13 @@ class QuestionController {
         }
     }
 
-    @Secured('ROLE_USER')
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(Question questionInstance) {
         respond questionInstance
     }
 
     @Transactional
-    @Secured('ROLE_USER')
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def update(Question questionInstance) {
         if (questionInstance == null) {
             notFound()
@@ -91,7 +101,7 @@ class QuestionController {
     }
 
     @Transactional
-    @Secured('ROLE_USER')
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def delete(Question questionInstance) {
 
         if (questionInstance == null) {
@@ -99,7 +109,9 @@ class QuestionController {
             return
         }
 
-        questionInstance.delete flush:true
+        questionInstance.status = Question.QuestionStatus.DELETED
+        questionInstance.save flush:true
+        //questionInstance.delete flush:true
 
         request.withFormat {
             form multipartForm {

@@ -16,8 +16,12 @@ class Question {
     static hasMany = [comments: Comment]
 
     static constraints = {
-        subject(nullable:false, blank:false)
-        content(nullable:false, blank:false)        
+        subject nullable:false, blank:false
+        content nullable:false, blank:false
+        dateCreated nullable: true
+        lastUpdated nullable: true
+        creator nullable: true
+        updater nullable: true
     }
     
     static mapping = {

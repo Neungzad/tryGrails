@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,7 +17,13 @@
 			<g:hasErrors bean="${questionInstance}">
 				<ul class="errors alert alert-danger" role="alert">
 					<g:eachError bean="${questionInstance}" var="error">
-					<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+					<li 
+						<g:if test="${error in org.springframework.validation.FieldError}">
+							data-field-id="${error.field}"
+						</g:if>
+						>
+						<g:message error="${error}"/>
+					</li>
 					</g:eachError>
 				</ul>
 			</g:hasErrors>

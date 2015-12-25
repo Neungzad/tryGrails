@@ -11,14 +11,18 @@ class Comment {
     User    updater
 
     static belongsTo = [question: Question]
-    static hasMany = [votes: Vote]
+    // static hasMany = [votes: Vote]
 
     static constraints = {
-    	comment(nullable:false, blank:false)
+    	comment nullable:false, blank:false
+        dateCreated nullable: true
+        lastUpdated nullable: true
+        creator nullable: true
+        updater nullable: true
     }
 
     static mapping = {
-    	comment(type: "text")
+    	comment(type: "text")        
     }
 
     enum CommentStatus {

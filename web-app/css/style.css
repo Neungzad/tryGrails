@@ -24,3 +24,7 @@
 .question-summary .author {
 	float: right;
 }
+.user-box {
+    background-color: #E0FFF8;
+    padding: 10px;
+}

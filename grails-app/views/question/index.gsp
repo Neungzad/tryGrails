@@ -52,7 +52,7 @@
 								<g:link action="show" id="${questionInstance.id}">
 									<g:formatDate format="dd MMM yyyy HH:mm น." date="${questionInstance.dateCreated}" />
 								</g:link>
-								<span>${questionInstance.user.displayName}</span>
+								<span>${questionInstance.creator.username}</span>
 							</div>
 						</div>
 					</div>					

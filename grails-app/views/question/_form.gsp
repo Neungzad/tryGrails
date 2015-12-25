@@ -15,7 +15,9 @@
 		<g:message code="question.content.label" default="Content" />
 		<span class="required-indicator">*</span>
 	</label>
-	<div class="col-sm-6"><g:textField class="form-control" name="content" required="" value="${questionInstance?.content}"/></div>
+	<div class="col-sm-6">
+		<g:textArea class="form-control" name="content" rows="5" required="" value="${questionInstance?.content}"/>
+	</div>
 
 </div>
 
